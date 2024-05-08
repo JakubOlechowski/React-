@@ -1,20 +1,28 @@
 import { useEffect, useState } from "react"
 
 const Form = () => {
-  const [newItem, setNewItem] = useState("")
-  const [todos, setTodos] = useState([{}])
+  const [newItem, setNewItem] = useState<string>("")
+  const [todos, setTodos] = useState([])
 
+  // useEffect(() => {
+  //   console.log(todos)
+  // }, [todos])
   function handleSubmit(e: any) {
-    e.preventDeafult()
-
-    setTodos([
-      ...todos,
+    e.preventDefault()
+    console.log(newItem)
+    setTodos((currentValue) => [
+      ...currentValue,
       { id: crypto.randomUUID(), title: newItem, completed: false },
     ])
+    // setTodos([
+    //   // ...todos,
+    //   { id: crypto.randomUUID(), title: newItem, completed: false },
+    // ])
+    console.log(todos)
   }
   return (
     <>
-      <form className="new-item-form">
+      <form onSubmit={handleSubmit} className="new-item-form">
         <div className="form-row">
           <label htmlFor="item">New Task</label>
           <input
@@ -24,7 +32,13 @@ const Form = () => {
             id="item"
           />
         </div>
-        <button className="btn">Add</button>
+        <button
+          disabled={newItem === "" ? true : false}
+          type="submit"
+          className="btn"
+        >
+          Add
+        </button>
       </form>
       <h1 className="header">To-do List</h1>
       <ul className="list">
