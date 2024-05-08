@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 
 const Form = () => {
   const [newItem, setNewItem] = useState("")
-  const [todos, setTodos] = useState([])
+  const [todos, setTodos] = useState([{}])
 
   function handleSubmit(e: any) {
     e.preventDeafult()
