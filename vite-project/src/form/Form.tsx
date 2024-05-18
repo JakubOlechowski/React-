@@ -1,25 +1,48 @@
 import { useEffect, useState } from "react"
 
+type TodoType = {
+  id: string
+  title: string
+  completed: boolean
+}
 const Form = () => {
   const [newItem, setNewItem] = useState<string>("")
-  const [todos, setTodos] = useState([])
+  const [todos, setTodos] = useState<TodoType[]>([])
 
-  // useEffect(() => {
-  //   console.log(todos)
-  // }, [todos])
-  function handleSubmit(e: any) {
-    e.preventDefault()
-    console.log(newItem)
-    setTodos((currentValue) => [
-      ...currentValue,
-      { id: crypto.randomUUID(), title: newItem, completed: false },
-    ])
-    // setTodos([
-    //   // ...todos,
-    //   { id: crypto.randomUUID(), title: newItem, completed: false },
-    // ])
+  useEffect(() => {
     console.log(todos)
+  }, [todos])
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>): void {
+    e.preventDefault()
+
+    setTodos((currentValue) => {
+      return [
+        ...currentValue,
+        { id: crypto.randomUUID(), title: newItem, completed: false },
+      ]
+    })
+
+    setNewItem("")
   }
+  function toggleTodo(id: string, completed: boolean): void {
+    setTodos((currentTodos: TodoType[]) => {
+      return currentTodos.map((todo: TodoType) => {
+        if (todo.id === id)
+          return {
+            ...todo,
+            completed,
+          }
+        return todo
+      })
+    })
+  }
+
+  function deleteTodo(id: string): void {
+    setTodos((currentTodos: TodoType[]) => {
+      return currentTodos.filter((todo) => todo.id !== id)
+    })
+  }
+
   return (
     <>
       <form onSubmit={handleSubmit} className="new-item-form">
@@ -42,27 +65,27 @@ const Form = () => {
       </form>
       <h1 className="header">To-do List</h1>
       <ul className="list">
-        <li>
-          <label>
-            <input type="checkbox" />
-            Do shit
-          </label>
-          <button className="btn btn-danger">Delete</button>
-        </li>
-        <li>
-          <label>
-            <input type="checkbox" />
-            Do shit
-          </label>
-          <button className="btn btn-danger">Delete</button>
-        </li>
-        <li>
-          <label>
-            <input type="checkbox" />
-            Do shit
-          </label>
-          <button className="btn btn-danger">Delete</button>
-        </li>
+        {todos.length === 0 && <p>no todos</p>}
+        {todos?.map((todo: TodoType) => (
+          <li key={todo.id}>
+            <label>
+              <input
+                checked={todo.completed}
+                type="checkbox"
+                onChange={(e: React.ChangeEvent<HTMLElement>) =>
+                  toggleTodo(todo.id, (e.target as HTMLInputElement).checked)
+                }
+              />
+              {todo.title}
+            </label>
+            <button
+              className="btn btn-danger"
+              onClick={() => deleteTodo(todo.id)}
+            >
+              Delete
+            </button>
+          </li>
+        ))}
       </ul>
     </>
   )
