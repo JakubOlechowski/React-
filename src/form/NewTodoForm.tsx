@@ -5,7 +5,8 @@ type TodoType = {
   title: string
   completed: boolean
 }
-const Form = () => {
+
+const NewTodoForm = () => {
   const [newItem, setNewItem] = useState<string>("")
   const [todos, setTodos] = useState<TodoType[]>([])
 
@@ -42,7 +43,6 @@ const Form = () => {
       return currentTodos.filter((todo) => todo.id !== id)
     })
   }
-
   return (
     <>
       <form onSubmit={handleSubmit} className="new-item-form">
@@ -65,7 +65,7 @@ const Form = () => {
       </form>
       <h1 className="header">To-do List</h1>
       <ul className="list">
-        {todos.length === 0 && <p>no todos</p>}
+        {todos.length === 0 && <label htmlFor="item">No todos</label>}
         {todos?.map((todo: TodoType) => (
           <li key={todo.id}>
             <label>
@@ -91,4 +91,4 @@ const Form = () => {
   )
 }
 
-export default Form
+export default NewTodoForm

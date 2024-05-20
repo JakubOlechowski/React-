@@ -1,8 +1,8 @@
-import Form from "./form/Form"
+import NewTodoView from "./form/NewTodoView"
 import "./styles.css"
 
 function App() {
-  return <Form />
+  return <NewTodoView />
 }
 
 export default App
